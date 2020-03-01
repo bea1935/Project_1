@@ -6,4 +6,6 @@ public class Outlet extends Component{
         super(name, source);
     }
 
+
+
 }

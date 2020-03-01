@@ -29,6 +29,8 @@ public class Appliance extends Component{
     }
 
     public void turnOn(){
+        System.out.println(source.toString() + " engaging");
+        System.out.println(toString() + " engaging");
         engage();
         System.out.println(toString() + " switching on");
         source.changeDraw(rating);
