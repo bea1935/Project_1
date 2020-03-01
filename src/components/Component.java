@@ -38,6 +38,7 @@ public abstract class Component {
     }
 
     public void engage(){
+        System.out.println(toString() + " engaging");
         engaged = true;
 
     }
