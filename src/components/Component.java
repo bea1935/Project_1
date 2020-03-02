@@ -10,7 +10,6 @@ public abstract class Component {
     protected int draw;
     protected boolean engaged;
     protected Collection<Component> loads;
-    protected String front;
 
     public Component(String name, Component source){
         this.name = name;
@@ -18,7 +17,6 @@ public abstract class Component {
         draw = 0;
         engaged = false;
         loads = new ArrayList<>();
-        front = "    ";
     }
 
     public String getName(){
@@ -89,16 +87,17 @@ public abstract class Component {
 
     public void display(){
         System.out.println("");
-        for(Component attachment: loads){
-            System.out.println(" + " + this.toString());
-            if(attachment.getLoads() == null) {
-                System.out.println(front + " + " + attachment.toString());
-            }else{
-                System.out.println(front + " + " +  attachment.toString());
-                attachment.front = this.front + "    ";
-                attachment.display();
+        System.out.println(" + " + this.toString());
+        for(Component breaker: loads) {
+            System.out.println("     + " + breaker.toString());
+            for (Component outlet : breaker.loads) {
+                System.out.println("         + " + outlet.toString());
+                for (Component appliance : outlet.loads) {
+                    System.out.println("             + " + appliance.toString());
+                }
             }
         }
+        System.out.println("");
     }
 
     @Override

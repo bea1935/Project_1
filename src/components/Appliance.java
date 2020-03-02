@@ -6,13 +6,13 @@ public class Appliance extends Component{
 
     public Appliance(String name, Component source, int rating) {
         super(name, source);
-        System.out.println(this.toString() +  " creating");
+        System.out.println(toString() +  " creating");
         attach();
         this.rating = rating;
     }
 
     public void attach(){
-        System.out.println(source.toString() + " --> " + this.toString());
+        System.out.println(source.toString() + " attaching --> " + this.toString());
         source.attach(this);
     }
 
@@ -47,6 +47,10 @@ public class Appliance extends Component{
     @Override
     public String toString(){
         return "Appliance " + getName() +  " (" + onOrOff() + "; rating " + rating + ")";
+    }
+
+    public String displayView(){
+        return "             + " + toString();
     }
 
 }
