@@ -2,8 +2,6 @@ package components;
 
 public class Appliance extends Component{
 
-    private int rating;
-
     public Appliance(String name, Component source, int rating) {
         super(name, source);
         System.out.println(toString() +  " creating");
@@ -20,37 +18,28 @@ public class Appliance extends Component{
         return rating;
     }
 
-    public String onOrOff(){
-        if(engaged()){
-            return "on";
-        }else{
-            return "off";
-        }
-    }
-
     public void turnOn(){
-        engage();
+        engaged = true;
         System.out.println(toString() + " switching on");
         source.changeDraw(rating);
     }
 
     public void turnOff(){
-        disengage();
+        engaged = false;
         System.out.println(toString() + " switching off");
-        source.changeDraw(rating*-1);
+        if(isSwitchOn()) {
+            source.changeDraw(rating * -1);
+        }
+    }
+
+    public void changeDraw(int rating){
+        draw += rating;
+        System.out.println(toString() +  " changing draw by " + rating);
+        source.changeDraw(rating);
     }
 
     public boolean isSwitchOn(){
         return engaged();
-    }
-
-    @Override
-    public String toString(){
-        return "Appliance " + getName() +  " (" + onOrOff() + "; rating " + rating + ")";
-    }
-
-    public String displayView(){
-        return "             + " + toString();
     }
 
 }

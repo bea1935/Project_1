@@ -4,8 +4,8 @@ public class Outlet extends Component{
 
     public Outlet(String name, Component source) {
         super(name, source);
-        System.out.println(toString() +  " creating");
         attach();
+        System.out.println(toString() +  " creating");
     }
 
     public void attach(){
@@ -13,13 +13,10 @@ public class Outlet extends Component{
         source.attach(this);
     }
 
-    @Override
-    public String toString(){
-        return "Outlet " + getName() +  " (draw " + getDraw() + ")";
-    }
-
-    public String displayView(){
-        return "         + " + toString();
+    public void changeDraw(int rating){
+        draw += rating;
+        System.out.println(this.toString() +  " changing draw by " + rating);
+        source.changeDraw(rating);
     }
 
 }

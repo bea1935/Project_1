@@ -10,6 +10,7 @@ public abstract class Component {
     protected int draw;
     protected boolean engaged;
     protected Collection<Component> loads;
+    protected int rating;
 
     public Component(String name, Component source){
         this.name = name;
@@ -17,6 +18,7 @@ public abstract class Component {
         draw = 0;
         engaged = false;
         loads = new ArrayList<>();
+        rating = 0;
     }
 
     public String getName(){
@@ -31,23 +33,24 @@ public abstract class Component {
     }
 
     protected void changeDraw(int delta){
-        System.out.println(this.toString() +  " changing draw by " + delta);
         draw += delta;
+        System.out.println(this.toString() +  " draw change " + delta);
     }
 
     public void engage(){
         System.out.println(toString() + " engaging");
-        engaged = true;
-
+        engageLoads();
     }
 
     public void disengage(){
-        engaged = false;
+        System.out.println(toString() + " disengaging");
+        disengageLoads();
     }
 
     protected void setDraw(int draw){
-        System.out.println(this.toString() +  " setting draw");
+        int temp = this.draw;
         this.draw = draw;
+        System.out.println(this.toString() +  " draw change " + temp*-1);
     }
 
     protected int getDraw(){
@@ -73,15 +76,57 @@ public abstract class Component {
     }
 
     protected void engageLoads(){
-        System.out.println(this.toString() +  " engaging");
-        for(Component load:loads){
-            load.engage();
+        for(Component load:loads) {
+            if (load instanceof PowerSource) {
+                load.engage();
+                for (Component outlet : load.loads) {
+                    outlet.engage();
+                    for (Component appliance : outlet.loads) {
+                        appliance.engage();
+                    }
+                }
+            }
+            if (load instanceof CircuitBreaker) {
+                load.engage();
+                for (Component outlet : load.loads) {
+                    for (Component appliance : outlet.loads) {
+                        appliance.engage();
+                    }
+                }
+            }
+            if (load instanceof Outlet) {
+                load.engage();
+                for (Component appliance : load.loads) {
+                    appliance.engage();
+                }
+            }
         }
     }
 
     protected void disengageLoads(){
-        for(Component load:loads){
-            load.disengage();
+        for(Component load:loads) {
+            if (load instanceof PowerSource) {
+                for (Component outlet : load.loads) {
+                    outlet.disengage();
+                    for (Component appliance : outlet.loads) {
+                        appliance.disengage();
+                    }
+                }
+            }
+            if (load instanceof CircuitBreaker) {
+                for (Component outlet : load.loads) {
+                    for (Component appliance : outlet.loads) {
+                        appliance.disengage();
+                    }
+                }
+            }
+            if (load instanceof Outlet) {
+                for (Component appliance : load.loads) {
+                    appliance.disengage();
+                }
+            }if(load instanceof Appliance){
+                load.disengage();
+            }
         }
     }
 
@@ -102,6 +147,6 @@ public abstract class Component {
 
     @Override
     public String toString(){
-        return "PowerSource " + name + " (draw " + draw + ")";
+        return Reporter.identify(this);
     }
 }
