@@ -1,18 +1,20 @@
 package components;
 
+import javax.swing.*;
+
 public class CircuitBreaker extends Component{
 
     protected int limit;
 
     public CircuitBreaker(String name, Component source, int limit) {
         super(name, source);
-        System.out.println(toString() +  " creating");
+        Reporter.report(this, Reporter.Msg.CREATING);
         attach();
         this.limit = limit;
     }
 
     public void attach(){
-        System.out.println(source.toString() + " attaching --> " + toString());
+        Reporter.report(this.source, this, Reporter.Msg.ATTACHING);
         source.attach(this);
     }
 
@@ -25,7 +27,7 @@ public class CircuitBreaker extends Component{
     }
 
     public void turnOn(){
-        System.out.println(toString() + " switching on");
+        Reporter.report(this, Reporter.Msg.SWITCHING_ON);
         for(Component part:loads){
             part.engage();
             for (Component appliance : part.loads) {
@@ -44,27 +46,26 @@ public class CircuitBreaker extends Component{
     public void changeDraw(int rating) {
         draw += rating;
         if(isOverload()){
-            System.out.println(toString() + ": has blown; current would be " + draw);
+            Reporter.report(this, Reporter.Msg.BLOWN, draw);
             overload();
         }else{
-            System.out.println(this.toString() +  " changing draw by " + rating);
+            Reporter.report(this, Reporter.Msg.DRAW_CHANGE, rating);
             source.changeDraw(rating);
         }
     }
 
     public void overload(){
-        System.out.println(toString() +  " switching off");
+        Reporter.report(this, Reporter.Msg.SWITCHING_OFF);
         setDraw(0);
         source.setDraw(0);
         for(Component load:loads) {
             if (load instanceof Outlet) {
-                System.out.println(toString() + " disengaging");
+                Reporter.report(this, Reporter.Msg.DISENGAGING);
                 engaged = false;
                 for (Component appliance : load.loads) {
                     appliance.disengage();
-                    System.out.println(appliance.toString() +
-                            " changing draw by " + -1*appliance.rating);
-                    System.out.println(appliance.source.toString() +  " changing draw by " + -1*appliance.rating);
+                    Reporter.report(appliance, Reporter.Msg.DRAW_CHANGE, appliance.rating*-1);
+                    Reporter.report(appliance.source, Reporter.Msg.DRAW_CHANGE, appliance.rating*-1);
                     appliance.source.draw = appliance.source.draw + -1*appliance.rating;
                 }
             }if(load instanceof Appliance){

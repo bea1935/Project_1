@@ -5,17 +5,17 @@ public class Outlet extends Component{
     public Outlet(String name, Component source) {
         super(name, source);
         attach();
-        System.out.println(toString() +  " creating");
+        Reporter.report(this, Reporter.Msg.CREATING);
     }
 
     public void attach(){
-        System.out.println(source.toString() + " attaching --> " + this.toString());
+        Reporter.report(this.source,this, Reporter.Msg.ATTACHING);
         source.attach(this);
     }
 
     public void changeDraw(int rating){
         draw += rating;
-        System.out.println(this.toString() +  " changing draw by " + rating);
+        Reporter.report(this, Reporter.Msg.DRAW_CHANGE, rating);
         source.changeDraw(rating);
     }
 

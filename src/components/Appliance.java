@@ -1,16 +1,18 @@
 package components;
 
+import javax.print.DocFlavor;
+
 public class Appliance extends Component{
 
     public Appliance(String name, Component source, int rating) {
         super(name, source);
-        System.out.println(toString() +  " creating");
+        Reporter.report(this, Reporter.Msg.CREATING);
         attach();
         this.rating = rating;
     }
 
     public void attach(){
-        System.out.println(source.toString() + " attaching --> " + this.toString());
+        Reporter.report(source, this, Reporter.Msg.ATTACHING);
         source.attach(this);
     }
 
@@ -20,13 +22,13 @@ public class Appliance extends Component{
 
     public void turnOn(){
         engaged = true;
-        System.out.println(toString() + " switching on");
+        Reporter.report(this, Reporter.Msg.SWITCHING_ON);
         source.changeDraw(rating);
     }
 
     public void turnOff(){
         engaged = false;
-        System.out.println(toString() + " switching off");
+        Reporter.report(this, Reporter.Msg.SWITCHING_OFF);
         if(isSwitchOn()) {
             source.changeDraw(rating * -1);
         }
@@ -34,6 +36,7 @@ public class Appliance extends Component{
 
     public void changeDraw(int rating){
         draw += rating;
+        Reporter.report(this, Reporter.Msg.DRAW_CHANGE, rating);
         System.out.println(toString() +  " changing draw by " + rating);
         source.changeDraw(rating);
     }

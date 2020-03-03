@@ -34,23 +34,23 @@ public abstract class Component {
 
     protected void changeDraw(int delta){
         draw += delta;
-        System.out.println(this.toString() +  " draw change " + delta);
+        Reporter.report(this, Reporter.Msg.DRAW_CHANGE, delta);
     }
 
     public void engage(){
-        System.out.println(toString() + " engaging");
+        Reporter.report(this, Reporter.Msg.ENGAGING);
         engageLoads();
     }
 
     public void disengage(){
-        System.out.println(toString() + " disengaging");
+        Reporter.report(this, Reporter.Msg.DISENGAGING);
         disengageLoads();
     }
 
     protected void setDraw(int draw){
         int temp = this.draw;
         this.draw = draw;
-        System.out.println(this.toString() +  " draw change " + temp*-1);
+        Reporter.report(this, Reporter.Msg.DRAW_CHANGE, temp*-1);
     }
 
     protected int getDraw(){
@@ -70,7 +70,6 @@ public abstract class Component {
     }
 
     protected void addLoad(Component newLoad){
-        System.out.println(this.toString() +  " adding load");
         attach(newLoad);
         draw += newLoad.draw;
     }

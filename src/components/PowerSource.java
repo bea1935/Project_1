@@ -4,14 +4,14 @@ public class PowerSource extends Component{
 
     public PowerSource(String name) {
         super(name, null);
-        System.out.println("PowerSource " + name + " (draw " + getDraw() + "): creating");
+        Reporter.report(this, Reporter.Msg.CREATING);
     }
 
     public void engage() {
-        System.out.println(toString() + " engaging");
+        Reporter.report(this, Reporter.Msg.ENGAGING);
         engaged = true;
         for(Component part:loads){
-            System.out.println(part.toString() + " engaging");
+            Reporter.report(part, Reporter.Msg.ENGAGING);
             part.engaged = true;
         }
     }
