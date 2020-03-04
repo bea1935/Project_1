@@ -1,6 +1,7 @@
 package components;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -21,53 +22,60 @@ public class Overload {
     private static final String PROMPT = "? ";
 
     private static HashMap<String, Component> parts;
-    private static Component root;
+    private static ArrayList<Component> root;
+    private static Appliance temp;
 
     public static void main(String[] args) {
-        if (!(args.length == 1 || args.length == 0)) {
+        if (!(args.length == 1)) {
             Reporter.addError( BAD_ARGS, "Usage: java components.Overload <configFile>" );
-        }
-        else if(args.length == 1){
-            parts = new HashMap<>();
-            System.out.println("Overload Project, CS2");
-            File starter = new File(args[0]);
-            try {
-                Scanner line = new Scanner(starter);
-                while (line.hasNextLine()) {
-                    create(line.nextLine());
-                }
-                line.close();
-            } catch (FileNotFoundException e) {
-                Reporter.addError( FILE_NOT_FOUND, "Config file not found" );
+        }parts = new HashMap<>();
+        System.out.println("Overload Project, CS2");
+        File starter = new File(args[0]);
+        try {
+            int created = 0;
+            Scanner line = new Scanner(starter);
+            while (line.hasNextLine()) {
+                System.out.println("");
+                create(line.nextLine());
+                created += 1;
             }
-            boolean condition = true;
-            Scanner reader = new Scanner(System.in);
-            while (condition) {
-                String temp = reader.nextLine();
-                String[] components = temp.split("", 4);
-                if (temp.equals("quit")) {
-                    condition = false;
-                }
-                if (components[0].equals("toggle")) {
-                    toggle(parts.get(components[1]));
-                }
-                if (components[0].equals("connect")) {
-                    if(components.length == 4) {
-                        connect(components[0], components[1], components[2], components[3]);
-                    }if(components.length == 3){
-                        connect(components[0], components[1], components[2]);
-                    }
-                    System.out.println("thats neat");
-                }
-                if (components[0].equals("display")) {
-                    root.display();
-                }else{
-                    Reporter.addError(
-                            UNKNOWN_USER_COMMAND,
-                            "Unknown user command");
-                }
-            }reader.close();
+            System.out.println(created + " component(s) created");
+            line.close();
+        } catch (FileNotFoundException e) {
+            Reporter.addError( FILE_NOT_FOUND, "Config file not found" );
         }
+        for(Component powerSource:root){
+            powerSource.engage();
+        }
+        boolean condition = true;
+        Scanner reader = new Scanner(System.in);
+        while (condition) {
+            String temp = reader.nextLine();
+            String[] components = temp.split("", 4);
+            if (temp.equals("quit")) {
+                condition = false;
+            }
+            if (components[0].equals("toggle")) {
+                toggle(parts.get(components[1]));
+            }
+            if (components[0].equals("connect")) {
+                if(components.length == 4) {
+                    connect(components[0], components[1], components[2], components[3]);
+                }if(components.length == 3){
+                    connect(components[0], components[1], components[2]);
+                }
+                System.out.println("thats neat");
+            }
+            if (components[0].equals("display")) {
+                for(Component powersource:root) {
+                    powersource.display();
+                }
+            }else{
+                Reporter.addError(
+                        UNKNOWN_USER_COMMAND,
+                        "Unknown user command");
+            }
+        }reader.close();
     }
 
     protected static void create(String part){
@@ -78,7 +86,7 @@ public class Overload {
         if(components[0].equals("PowerSource")){
             String name = components[1];
             parts.put(name, new PowerSource(name));
-            root = parts.get(name);
+            root.add(parts.get(name));
         }if(components[0].equals("CircuitBreaker")){
             String name = components[1];
             String source = components[2];
@@ -107,6 +115,13 @@ public class Overload {
                     UNSWITCHABLE_COMPONENT,
                     "That component can not be switched on or off");
         }else {
+            if(part.getClass().toString().equals("Appliance")){
+                if (part.engaged()) {
+                    part.turnOff();
+                } else {
+                    part.turnOn();
+                }
+            }
             if (part.engaged()) {
                 part.disengage();
             } else {

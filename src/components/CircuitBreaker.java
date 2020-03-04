@@ -39,6 +39,14 @@ public class CircuitBreaker extends Component{
         }
     }
 
+    /**
+     * This is here to make Overload happy
+     */
+    @Override
+    public void turnOff() {
+        System.out.println("This won't happen");
+    }
+
     public boolean isOverload(){
         return draw > limit;
     }

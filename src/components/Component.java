@@ -60,39 +60,64 @@ public abstract class Component {
     }
 
     /**
-     * This function will change the draw of the
+     * This function will change the draw of the system
+     * and print out a message of the change
      *
-     * @param delta
+     * @param delta the amount that is being changed
      */
     protected void changeDraw(int delta){
         draw += delta;
         Reporter.report(this, Reporter.Msg.DRAW_CHANGE, delta);
     }
 
+    /**
+     * this will engage a component and all parts connected to it
+     */
     public void engage(){
         Reporter.report(this, Reporter.Msg.ENGAGING);
         engageLoads();
     }
 
+    /**
+     * this will disengage a component and all parts connected to it
+     */
     public void disengage(){
         Reporter.report(this, Reporter.Msg.DISENGAGING);
         disengageLoads();
     }
 
+    /**
+     * This will set the draw of the component to the specified amount
+     * and print a message about it.
+     *
+     * @param draw the newly determined draw
+     */
     protected void setDraw(int draw){
         int temp = this.draw;
         this.draw = draw;
         Reporter.report(this, Reporter.Msg.DRAW_CHANGE, temp*-1);
     }
 
+    /**
+     * This will return the draw of the part
+     * @return the draw of the part
+     */
     protected int getDraw(){
         return draw;
     }
 
+    /**
+     * This will return whether the part is engaged or not
+     *
+     * @return whether the part is engaged or not
+     */
     protected boolean engaged(){
         return engaged;
     }
 
+    /**
+     * This will engage all of the parts connected to the component
+     */
     protected void engageLoads(){
         for(Component load:loads) {
             if (load instanceof PowerSource) {
@@ -121,6 +146,9 @@ public abstract class Component {
         }
     }
 
+    /**
+     * This will disengage all of the parts connected to the component
+     */
     protected void disengageLoads(){
         for(Component load:loads) {
             if (load instanceof PowerSource) {
@@ -148,6 +176,9 @@ public abstract class Component {
         }
     }
 
+    /**
+     * This will print out a system showing the parts
+     */
     public void display(){
         System.out.println("");
         System.out.println(" + " + this.toString());
@@ -167,4 +198,8 @@ public abstract class Component {
     public String toString(){
         return Reporter.identify(this);
     }
+
+    public abstract void turnOn();
+
+    public abstract void turnOff();
 }

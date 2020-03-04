@@ -47,4 +47,20 @@ public class Outlet extends Component{
         source.changeDraw(rating);
     }
 
+    /**
+     * This is here to make Overload happy
+     */
+    @Override
+    public void turnOn() {
+        System.out.println("this wont happen");
+    }
+
+    /**
+     * This is here to make Overload happy
+     */
+    @Override
+    public void turnOff() {
+        System.out.println("this wont happen");
+    }
+
 }

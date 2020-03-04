@@ -15,4 +15,20 @@ public class PowerSource extends Component{
             part.engaged = true;
         }
     }
+
+    /**
+     * This is here to make Overload happy
+     */
+    @Override
+    public void turnOn() {
+        System.out.println("this wont happen");
+    }
+
+    /**
+     * This is here to make Overload happy
+     */
+    @Override
+    public void turnOff() {
+        System.out.println("this wont happen");
+    }
 }
