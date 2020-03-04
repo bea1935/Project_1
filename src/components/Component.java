@@ -3,6 +3,13 @@ package components;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * This is the Component class which serves as the basis
+ * for all other components involved with the system
+ *
+ * @author Beck Anderson
+ */
+
 public abstract class Component {
 
     protected final String name;
@@ -12,6 +19,14 @@ public abstract class Component {
     protected Collection<Component> loads;
     protected int rating;
 
+    /**
+     * This function will create a new Component for the
+     * system.
+     *
+     * @param name the name of the component
+     * @param source the components that the component is
+     *               connected to
+     */
     public Component(String name, Component source){
         this.name = name;
         this.source = source;
@@ -21,10 +36,22 @@ public abstract class Component {
         rating = 0;
     }
 
+    /**
+     * This will retrieve the name of the component
+     *
+     * @return the name of the component
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * This will attach a component to the system and
+     * if the part is on, engage the newly connected
+     * component
+     *
+     * @param load the part being added to the system
+     */
     protected void attach(Component load){
         loads.add(load);
         if(engaged){
@@ -32,6 +59,11 @@ public abstract class Component {
         }
     }
 
+    /**
+     * This function will change the draw of the
+     *
+     * @param delta
+     */
     protected void changeDraw(int delta){
         draw += delta;
         Reporter.report(this, Reporter.Msg.DRAW_CHANGE, delta);
@@ -57,21 +89,8 @@ public abstract class Component {
         return draw;
     }
 
-    protected Component getSource(){
-        return source;
-    }
-
-    protected Collection<Component> getLoads(){
-        return loads;
-    }
-
     protected boolean engaged(){
         return engaged;
-    }
-
-    protected void addLoad(Component newLoad){
-        attach(newLoad);
-        draw += newLoad.draw;
     }
 
     protected void engageLoads(){

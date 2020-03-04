@@ -1,7 +1,5 @@
 package components;
 
-import javax.print.DocFlavor;
-
 public class Appliance extends Component{
 
     public Appliance(String name, Component source, int rating) {
