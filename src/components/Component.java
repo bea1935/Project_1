@@ -194,12 +194,24 @@ public abstract class Component {
         System.out.println("");
     }
 
+    /**
+     * This function will return the component
+     * in a clean, string format
+     *
+     * @return the component in a clean, string format
+     */
     @Override
     public String toString(){
         return Reporter.identify(this);
     }
 
+    /**
+     * This is here to allow Appliance in Overload
+     */
     public abstract void turnOn();
 
+    /**
+     * This is here to allow Appliance in Overload
+     */
     public abstract void turnOff();
 }

@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * This function is the one that executes the main
+ * method and finds any errors that would be associated
+ * with either the read file or user input
+ *
+ * @author Beck Anderson
+ */
 public class Overload {
 
     public static final int BAD_ARGS = 1;
@@ -25,6 +32,10 @@ public class Overload {
     private static ArrayList<Component> root;
     private static Appliance temp;
 
+    /**
+     * The main function to be executed
+     * @param args the file to be read
+     */
     public static void main(String[] args) {
         if (!(args.length == 1)) {
             Reporter.addError( BAD_ARGS, "Usage: java components.Overload <configFile>" );
@@ -78,6 +89,11 @@ public class Overload {
         }reader.close();
     }
 
+    /**
+     * This will create a component to be added to a system
+     *
+     * @param part the part to be made
+     */
     protected static void create(String part){
         String[] components = part.split(" ", 3);
         if(!(components.length==2 || components.length==3||components.length==4)){
@@ -109,6 +125,11 @@ public class Overload {
         }
     }
 
+    /**
+     * This will turn a component on or off if it can be
+     *
+     * @param part the component to be toggled
+     */
     protected static void toggle(Component part){
         if(part.getClass().toString().equals("PowerSource")||part.getClass().toString().equals("Outlet")){
             Reporter.addError(
@@ -121,15 +142,25 @@ public class Overload {
                 } else {
                     part.turnOn();
                 }
-            }
-            if (part.engaged()) {
-                part.disengage();
-            } else {
-                part.engage();
+            }else {
+                if (part.engaged()) {
+                    part.disengage();
+                } else {
+                    part.engage();
+                }
             }
         }
     }
 
+    /**
+     * This will connect a component to the system
+     *
+     * @param type the type of part being added
+     * @param name the name of the component
+     * @param source the component it is being attached to
+     * @param other wither the limit of the breaker or
+     *              the rating of the appliance
+     */
     protected static void connect(String type, String name, String source, String other){
         if(parts.containsKey(name)){
             Reporter.addError(
@@ -148,6 +179,13 @@ public class Overload {
         }
     }
 
+    /**
+     * This will connect a component to the system
+     *
+     * @param type the type of part being added
+     * @param name the name of the component
+     * @param source the component it is being attached to
+     */
     protected static void connect(String type, String name, String source) {
         if (parts.containsKey(name)) {
             Reporter.addError(
